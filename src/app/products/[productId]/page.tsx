@@ -5,7 +5,7 @@ async function getProduct(id: string) {
   
   const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
     cache: 'force-cache' ,
-    next: { revalidate: 3600 }, // Revalidate every 60 seconds
+    next: { revalidate: 3600 }, // Revalidate every 1 hour
   });
   
   if (!res.ok) {
