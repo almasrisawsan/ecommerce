@@ -1,4 +1,4 @@
-import HomePageComponent from "@/pages/home";
+import HomePageComponent from "@/screens/home";
 
 async function getFeaturedProducts() {
 
