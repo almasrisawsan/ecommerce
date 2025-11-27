@@ -3,7 +3,7 @@ import ProductDetails from '@/components/ProductDetails';
 
 async function getProduct(id: string) {
   
-  const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
+  const res = await fetch(`${process.env.API_URL}/products/${id}`, {
     cache: 'force-cache' ,
     next: { revalidate: 3600 }, // Revalidate every 1 hour
   });

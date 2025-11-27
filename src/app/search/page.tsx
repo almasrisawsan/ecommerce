@@ -14,12 +14,12 @@ type Product = {
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const query = searchParams?.get('q');
+  const query = searchParams?.get('term');
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch('https://fakestoreapi.com/products');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
       const data = await res.json();
       setProducts(data);
     }

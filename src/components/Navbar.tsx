@@ -16,7 +16,7 @@ const Navbar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search?q=${searchTerm}`);
+      router.push(`/search?term=${searchTerm}`);
     }
   };
 
