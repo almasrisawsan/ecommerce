@@ -1,6 +1,13 @@
 'use client';
 
-import { useCart } from '@/contexts/CartContext';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  removeFromCart,
+  updateQuantity,
+  selectCart,
+  selectTotalPrice,
+  selectTotalItems,
+} from '@/store/slices/cartSlice';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -8,9 +15,11 @@ import { Minus, Plus, X, ShoppingBag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity, getTotalPrice, getTotalItems } = useCart();
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
+  const totalItems = useSelector(selectTotalItems);
+  const subtotal = useSelector(selectTotalPrice);
 
-  const subtotal = getTotalPrice();
   const tax = subtotal * 0.1; // 10% tax
   const shipping = cart.length > 0 ? 10 : 0;
   const total = subtotal + tax + shipping;
@@ -27,7 +36,7 @@ export default function CartPage() {
               Your cart is empty
             </h1>
             <p className="text-lg text-muted-foreground mb-8 text-pretty max-w-md">
-              Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
+              Looks like you haven&apos;t added any items to your cart yet. Start shopping to fill it up!
             </p>
             <Button asChild size="lg" className="gap-2">
               <Link href="/">
@@ -56,14 +65,14 @@ export default function CartPage() {
             Shopping Cart
           </h1>
           <p className="mt-2 text-muted-foreground">
-            {getTotalItems()} {getTotalItems() === 1 ? 'item' : 'items'} in your cart
+            {totalItems} {totalItems === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cart?.map((item) => (
+            {cart.map((item) => (
               <Card key={item.id} className="p-4 sm:p-6">
                 <div className="flex gap-4 sm:gap-6">
                   {/* Product Image */}
@@ -90,7 +99,7 @@ export default function CartPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => dispatch(removeFromCart(item.id))}
                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
                       >
                         <X className="h-4 w-4" />
@@ -104,7 +113,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}
                           disabled={item.quantity <= 1}
                           className="h-8 w-8"
                         >
@@ -117,7 +126,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
                           className="h-8 w-8"
                         >
                           <Plus className="h-3 w-3" />

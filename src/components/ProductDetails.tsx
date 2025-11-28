@@ -1,26 +1,30 @@
-
 'use client';
 
 import Image from 'next/image';
-import { useCart } from '@/contexts/CartContext';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Check, Loader2 } from 'lucide-react';
-import { Button } from './ui/button';
-import { TProduct } from '@/types/product';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/store/slices/cartSlice';
 
-type TProductDetailsProps = {
-    product: TProduct;
-}
+type Product = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+};
 
-export default function ProductDetails({ product }: TProductDetailsProps) {
-  const { addToCart } = useCart();
+export default function ProductDetails({ product }: { product: Product }) {
+  const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
   const handleAddToCart = () => {
     setIsAdding(true);
     setTimeout(() => {
-      addToCart({ ...product, id: String(product.id) });
+      dispatch(addToCart(product));
       setIsAdding(false);
       setIsAdded(true);
       setTimeout(() => {

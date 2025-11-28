@@ -1,22 +1,21 @@
-
 'use client';
 
 import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { selectTotalItems } from '@/store/slices/cartSlice';
 
 const Navbar = () => {
-  const { getTotalItems } = useCart();
-  const totalItems = getTotalItems();
+  const totalItems = useSelector(selectTotalItems);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search?term=${searchTerm}`);
+      router.push(`/search?q=${searchTerm}`);
     }
   };
 

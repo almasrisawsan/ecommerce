@@ -1,18 +1,31 @@
 
+'use client';
 import ProductCard from '@/components/ProductCard';
+import { fetchProducts } from '@/store/thunks/productsThunk';
 import { TProduct } from '@/types/product';
-import { Suspense } from 'react';
+import { RootState } from '@reduxjs/toolkit/query';
+import { Suspense,  useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-async function getAllProducts() {
-  const res = await fetch('https://fakestoreapi.com/products');
-  if (!res.ok) {
-    throw new Error('Failed to fetch products');
-  }
-  return res.json();
-}
+// async function getAllProducts() {
+//   const res = await fetch('https://fakestoreapi.com/products');
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch products');
+//   }
+//   return res.json();
+// }
 
-const ProductsList = async () => {
-  const products = await getAllProducts();
+const ProductsList = () => {
+
+  const dispatch = useDispatch();
+  const {items: products, status} =  useSelector((state: RootState) => state.products);
+
+   useEffect(() => {
+      dispatch(fetchProducts());
+  }, [ dispatch]);
+
+  console.log({status})
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       {products?.map((product: TProduct) => (
